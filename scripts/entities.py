@@ -7,12 +7,14 @@ class PhysicsEntity:
         self.position = list(position)
         self.size = size
         self.velocity = [0, 0]
+        self.collisions = {"up": False, "down": False, "right": False, "left":False}
 
     def rect(self):
         return pygame.Rect(self.position[0], self.position[1], self.size[1], self.size[1])
 
     def update(self, tilemap, movement=(0,0)):
         frame_movement = (movement[0] + self.velocity[0], movement[1] + self.velocity[1])
+        self.collisions = {"up": False, "down": False, "right": False, "left":False}
 
         self.position[0] += frame_movement[0]
         entity_rect = self.rect()
@@ -20,8 +22,10 @@ class PhysicsEntity:
             if entity_rect.colliderect(rect):
                 if frame_movement[0] > 0:
                     entity_rect.right = rect.left
+                    self.collisions["right"] = True
                 if frame_movement[0] < 0:
                     entity_rect.left = rect.right
+                    self.collisions["left"] = True
                 self.position[0] = entity_rect.x
 
         self.position[1] += frame_movement[1]
@@ -31,12 +35,17 @@ class PhysicsEntity:
             if entity_rect.colliderect(rect):
                 if frame_movement[1] > 0:
                     entity_rect.bottom = rect.top
+                    self.collisions["down"] = True
                 if frame_movement[1] < 0:
                     entity_rect.top = rect.bottom
+                    self.collisions["up"] = True
                 self.position[1] = entity_rect.y        
 
         #Falling speed
         self.velocity[1] = min(5, self.velocity[1] + 0.1)
 
-    def render(self, surface):
-        surface.blit(self.game.assets["player"], self.position)
+        if self.collisions["down"] or self.collisions["up"]:
+            self.velocity[1] = 0
+
+    def render(self, surface, offset=(0, 0)):
+        surface.blit(self.game.assets["player"], (self.position[0] - offset[0], self.position[1] - offset[1]))
