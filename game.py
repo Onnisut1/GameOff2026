@@ -1,8 +1,8 @@
 import pygame
 import sys  
 
-from scripts.entities import PhysicsEntity
-from scripts.utilities import load_image, load_images
+from scripts.entities import PhysicsEntity, Player
+from scripts.utilities import load_image, load_images, Animation
 from scripts.tilemap import Tilemap
 
 class Game:
@@ -21,11 +21,13 @@ class Game:
 
         self.assets = {
             "placeholder": load_images("tiles/placeholder"), 
-            "player": load_image("Hattivatti.png")
+            "player": load_image("Hattivatti.png"),
+            "player/idle": Animation(load_images("player/idle"), img_duration=12),
+            "player/run": Animation(load_images("player/run"), img_duration=3)
 
         }
 
-        self.player = PhysicsEntity(self, "player", (50, 50), (32, 32))
+        self.player = Player(self, (50, 50), (32, 32))
 
         self.tilemap = Tilemap(self, tile_size=32)
 
