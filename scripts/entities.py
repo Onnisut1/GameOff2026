@@ -10,7 +10,7 @@ class PhysicsEntity:
         self.collisions = {"up": False, "down": False, "right": False, "left":False}
 
         self.action = ""
-        self.anim_offset = (-3, -3)
+        self.anim_offset = (-1, 0)
         self.flip = False
         self.set_action("idle")
 
@@ -81,7 +81,7 @@ class Player(PhysicsEntity):
             self.air_time = 0
 
         if self.air_time > 3:
-            self.action("jump")
+            self.set_action("idle")
         elif movement[0] != 0:
             self.set_action("run")
         else:
