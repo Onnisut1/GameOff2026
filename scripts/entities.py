@@ -15,7 +15,7 @@ class PhysicsEntity:
         self.set_action("idle")
 
     def rect(self):
-        return pygame.Rect(self.position[0], self.position[1], self.size[1], self.size[1])
+        return pygame.Rect(self.position[0], self.position[1], self.size[0], self.size[1])
 
     def set_action(self, action):
         if action != self.action:
@@ -73,7 +73,7 @@ class Player(PhysicsEntity):
         super().__init__(game, "player", position, size)
         self.air_time = 0
 
-    def upfate(self, tilemap, movement=(0, 0)):
+    def update(self, tilemap, movement=(0, 0)):
         super().update(tilemap, movement=movement)
 
         self.air_time += 1
